@@ -42,3 +42,12 @@ pipeline {
         }
     }
 }
+post {
+    always {
+        emailext (
+            subject: "Build Result: ${currentBuild.currentResult}",
+            body: "Job: ${env.JOB_NAME}\nBuild: ${env.BUILD_NUMBER}\nStatus: ${currentBuild.currentResult}",
+            to: "lohith2823@gmail.com"
+        )
+    }
+}
