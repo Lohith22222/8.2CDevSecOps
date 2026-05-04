@@ -1,34 +1,43 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Lohith22222/8.2CDevSecOps.git'
+                echo 'Checking out nodejs-goof project from GitHub repository'
+                checkout scm
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                echo 'Installing Node.js project dependencies using npm'
+                bat 'call npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat 'npm test || exit /b 0'
+                echo 'Running project tests. Pipeline continues even if tests fail.'
+                bat 'call npm test || exit /b 0'
             }
         }
 
         stage('Generate Coverage Report') {
             steps {
-                bat 'npm run coverage || exit /b 0'
+                echo 'Generating coverage report if coverage script is available.'
+                bat 'call npm run coverage || exit /b 0'
             }
         }
 
         stage('NPM Audit (Security Scan)') {
             steps {
-                bat 'npm audit || exit /b 0'
+                echo 'Running npm audit to identify known dependency vulnerabilities.'
+                bat 'call npm audit || exit /b 0'
             }
         }
     }
